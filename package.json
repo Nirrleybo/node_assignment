@@ -1,0 +1,19 @@
+{
+  "name": "nir_module_test",
+  "version": "1.0.0",
+  "description": "Test module dependencies construction",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest"
+  },
+  "author": "nir.lebo@gmail.com",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^26.1.0"
+  },
+  "engines": {
+    "node": ">=12.16.1",
+    "npm": ">=6.13.4"
+  }
+}
