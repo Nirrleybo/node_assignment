@@ -1,11 +1,12 @@
-const Files = require('./files')
-
+const Files = require('./files');
+const path = require('path');
 class Main {
 
     async source_code_list_to_modules_and_dependencies(source_code_list) {
         let modules = {};
-        return source_code_list.forEach(async source_path => {
-            await this.source_code_path_to_module(source_path)
+        source_code_list.forEach(async source_path => {
+            const mod = await this.source_code_path_to_module(source_path);
+            console.log(mod);
         })
         return modules;
     }
@@ -15,16 +16,24 @@ class Main {
             return null;
         }
         if(await this.isPathContainModule(source_code_path)) {
-            return {}    
+            return {
+                module_name: path.basename(source_code_path),
+                dependencies: await this.fetchDependenciesFromModulefile(source_code_path)
+            }    
         }
-        return {}
+        return this.source_code_path_to_module(source_code_path.substring(0, source_code_path.lastIndexOf("/")))
     }
 
-    async isPathContainModule(path) {
-        if(await Files.isDir(path)) {
-            return await Files.containFile(".module")
+    async isPathContainModule(source_path) {
+        if(Files.isDir(source_path)) {
+            return await Files.containFile(source_path, ".module")
         }
         return false;
+    }
+
+    async fetchDependenciesFromModulefile(module_dir_path) {
+        let modules = await Files.readFile(path.join(module_dir_path, ".module"));
+        return modules.split('\n');
     }
 }
 
