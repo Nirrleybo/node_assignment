@@ -1,10 +1,9 @@
-# Node Application
+# Dependencies Builder Assignment
 
-# Requirments
+## Requirements
 
-Nodejs 12.16.1  
-npm 6.13.4
-
+`Nodejs`: 12.16.1  
+`npm`: 6.13.4
 
 ```sh
 # Set node
