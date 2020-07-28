@@ -13,7 +13,7 @@ async function main() {
         file: "node_app/mocks/CHANGED.txt"
     };
     args = Object.assign(defaults, args);
-    console.log(args);
+    // console.log(args);
     let source_list = await Files.readFile(args.file);
     source_list = source_list.split('\n');
     // console.log(source_list);
