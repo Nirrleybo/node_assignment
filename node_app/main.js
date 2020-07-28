@@ -1,5 +1,6 @@
 const Files = require('./files');
 const path = require('path');
+const Utils = require('./utils');
 class Main {
 
     async source_code_list_to_modules_and_dependencies(source_code_list) {
@@ -35,7 +36,7 @@ class Main {
 
     async fetchDependenciesFromModulefile(module_dir_path) {
         let modules = await Files.readFile(path.join(module_dir_path, ".module"));
-        return modules.split('\n').filter(mod => mod && mod.length > 0);
+        return Utils.file_content_to_list_array(modules);
     }
 }
 

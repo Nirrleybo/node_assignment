@@ -11,6 +11,10 @@ class Utils {
         }
         return res;
     }
+
+    static file_content_to_list_array(file_content) {
+        return file_content.split('\n').filter(mod => mod && mod.length > 0);
+    }
 }
 
 
