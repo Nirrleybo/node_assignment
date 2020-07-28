@@ -8,8 +8,12 @@ process.on('unhandledRejection', (reason, promise) => {
 })
 
 async function main() {
-    const args = Utils.cmd_string_to_obj_args();
-    // console.log(args);
+    let args = Utils.cmd_string_to_obj_args();
+    let defaults = {
+        file: "node_app/mocks/CHANGED.txt"
+    };
+    args = Object.assign(defaults, args);
+    console.log(args);
     let source_list = await Files.readFile(args.file);
     source_list = source_list.split('\n');
     // console.log(source_list);
@@ -17,4 +21,4 @@ async function main() {
     return await main.source_code_list_to_modules_and_dependencies(source_list);
 }
 
-main();
+main().then(x => console.log(x))
