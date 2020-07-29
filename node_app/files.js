@@ -18,7 +18,7 @@ class Files {
 
     static async isDir(file_path) {
         const result = await fsPromises.stat(file_path).catch(err => {
-            if (isErrorNotFound(err)) {
+            if (err) {
                 return false;
             }
             throw err;
