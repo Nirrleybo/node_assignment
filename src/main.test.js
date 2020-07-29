@@ -2,7 +2,7 @@ const Main = require('./main');
 const Files = require('./files');
 
 const DEPENDENCIES_MOCK = require('./mocks/expected_dependencies_result').module;
-const SOURCE_CODE_LIST_FILE_PATH = "node_app/mocks/CHANGED.txt";
+const SOURCE_CODE_LIST_FILE_PATH = "src/mocks/CHANGED.txt";
 
 const main = new Main();
 
@@ -31,19 +31,19 @@ describe("Test dependencies builder", () => {
     });
 
     it("should find module in source path", async () => {
-        expect(await main.isPathContainModule("node_app/project/alice/")).toBeTruthy()
+        expect(await main.isPathContainModule("src/project/alice/")).toBeTruthy()
     });
 
     it("should not find module in source path", async () => {
-        expect(await main.isPathContainModule("node_app/project/alice/Dockerfile")).toBeFalsy()
+        expect(await main.isPathContainModule("src/project/alice/Dockerfile")).toBeFalsy()
     });
 
     it("should fetch modules list from source path", async () => {
-        expect(await main.fetchDependenciesFromModulefile("node_app/project/bob")).toEqual(["alice", "charlie"])
+        expect(await main.fetchDependenciesFromModulefile("src/project/bob")).toEqual(["alice", "charlie"])
     });
 
     it("should fetch empty modules list from source path", async () => {
-        expect(await main.fetchDependenciesFromModulefile("node_app/project/alice")).toEqual([])
+        expect(await main.fetchDependenciesFromModulefile("src/project/alice")).toEqual([])
     });
 
 });
