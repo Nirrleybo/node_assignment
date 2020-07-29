@@ -12,9 +12,25 @@ nvm use 12.16
 # Install
 npm i
 
-# Run
-node index.js file=test_file
-
 # Test
 npm run test
+```
+
+## Run locally
+
+### Defaults params set to:  
+`changed_file_path`: "CHANGED.txt"  
+`project_path`: "sample-project"
+```sh
+# Run with params:
+node index.js changed_file_path=CHANGED.txt project_path=sample-project
+```
+
+## Docker
+
+```sh
+# Build
+docker build -t test-code .
+
+# Run
 ```

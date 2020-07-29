@@ -18,7 +18,8 @@ function fetch_args() {
 
 async function main() {
     const args = fetch_args();
-
+    console.log(args);
+    
     const project_path = path.join(__dirname, args.project_path);
     const changed_file_path = path.join(__dirname, args.changed_file_path);
     
