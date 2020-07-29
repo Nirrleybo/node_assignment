@@ -15,16 +15,17 @@ class Main {
         const files = await Files.fetch_files_from_dir(dir);
         for (let index = 0; index < files.length; index++) {
             const file_name = files[index];
-            dir_dep[file_name] = await this.source_code_path_to_module(path.join(dir, file_name));
+            dir_dep[file_name] = await this.fetchDependenciesFromPath(path.join(dir, file_name));
         }
         return dir_dep
     }
 
-    async source_code_path_to_module(source_code_path) {
-        if(!source_code_path || source_code_path.length == 0 || !await this.isPathContainModule(source_code_path)) {
+    async fetchDependenciesFromPath(module_dir_path) {
+        if(!module_dir_path || module_dir_path.length == 0 || !await this.isPathContainModule(module_dir_path)) {
             return null;
         }
-        return await this.fetchDependenciesFromModulefile(source_code_path); 
+        let modules = await Files.readFile(path.join(module_dir_path, ".module"));
+        return Utils.file_content_to_list_array(modules);
     }
 
     async isPathContainModule(source_path) {
@@ -32,11 +33,6 @@ class Main {
             return await Files.containFile(source_path, ".module")
         }
         return false;
-    }
-
-    async fetchDependenciesFromModulefile(module_dir_path) {
-        let modules = await Files.readFile(path.join(module_dir_path, ".module"));
-        return Utils.file_content_to_list_array(modules);
     }
 
     get_mod_dependencies_rec(dir, mod_arr, dep_arr) {

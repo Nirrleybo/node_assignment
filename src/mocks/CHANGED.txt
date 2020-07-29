@@ -1,2 +1,2 @@
-src/project/alice/Dockerfile
-src/project/bob/db/src/main.js
+deployment/Dockerfile
+app-backend/src/test/java/ServiceImplTest.java

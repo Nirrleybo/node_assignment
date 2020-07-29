@@ -1,49 +1,46 @@
 const Main = require('./main');
-const Files = require('./files');
+const Path = require('path');
 
 const DEPENDENCIES_MOCK = require('./mocks/expected_dependencies_result').module;
-const SOURCE_CODE_LIST_FILE_PATH = "src/mocks/CHANGED.txt";
+const DIR_DEP_MOCK = require('./mocks/expected_dir_dep').module;
+
+const PROJ_PATH = "src/mocks/project"
+const CHANGED_PATH = "src/mocks/CHANGED.txt"
+const MOD_PATH_WITH_DEP = Path.join(PROJ_PATH, "app-backend")
+const MOD_PATH_DEP_ARR = [ 'db-integration', 'cache-integration' ];
+const MOD_PATH_WITH_NO_DEP = Path.join(PROJ_PATH, "assets");
+const PATH_TO_FILE = "src/mocks/project/app-backend/src/main/java/ServiceImpl.java"
 
 const main = new Main();
 
 describe("Test dependencies builder", () => {
 
-    it("should successfully build module dependencies from source list", async () => {
-        const source_list = (await Files.readFile(SOURCE_CODE_LIST_FILE_PATH)).split('\n');
-        const dependencies = await main.source_code_list_to_modules_and_dependencies(source_list);
-        expect(dependencies).toEqual(DEPENDENCIES_MOCK);
+    it("should successfully build module dependencies", async () => {
+        const mod_dep_arr = await main.get_dependencies(PROJ_PATH, CHANGED_PATH)
+        expect(mod_dep_arr).toEqual(DEPENDENCIES_MOCK);
     });
 
-    it("should get the right module name with empty dependencies from source path", async () => {
-        const source_list = (await Files.readFile(SOURCE_CODE_LIST_FILE_PATH)).split('\n');
-        expect(await main.source_code_path_to_module(source_list[0])).toEqual({
-            module_name: "alice",
-            dependencies: []
-        });
+    it("should build dir modules", async () => {
+        const dir_dep = await main.get_dir_modules(PROJ_PATH)
+        expect(dir_dep).toEqual(DIR_DEP_MOCK);
     });
 
-    it("should get the right module name with dependencies from source path", async () => {
-        const source_list = (await Files.readFile(SOURCE_CODE_LIST_FILE_PATH)).split('\n');
-        expect(await main.source_code_path_to_module(source_list[1])).toEqual({
-            module_name: "bob",
-            dependencies: ["alice", "charlie"]
-        });
+    it("should fetch modules from source path", async () => {
+        const dep_arr = await main.fetchDependenciesFromPath(MOD_PATH_WITH_DEP)
+        expect(dep_arr).toEqual(MOD_PATH_DEP_ARR);
     });
 
-    it("should find module in source path", async () => {
-        expect(await main.isPathContainModule("src/project/alice/")).toBeTruthy()
+    it("should fetch empty array from source path with empty modules file", async () => {
+        const dep_arr = await main.fetchDependenciesFromPath(MOD_PATH_WITH_NO_DEP)
+        expect(dep_arr).toEqual([]);
     });
 
-    it("should not find module in source path", async () => {
-        expect(await main.isPathContainModule("src/project/alice/Dockerfile")).toBeFalsy()
+    it("should successfully identify that path is a module", async () => {
+        expect(await main.isPathContainModule(MOD_PATH_WITH_NO_DEP)).toBeTruthy();
     });
 
-    it("should fetch modules list from source path", async () => {
-        expect(await main.fetchDependenciesFromModulefile("src/project/bob")).toEqual(["alice", "charlie"])
-    });
-
-    it("should fetch empty modules list from source path", async () => {
-        expect(await main.fetchDependenciesFromModulefile("src/project/alice")).toEqual([])
+    it("should successfully identify that path is NOT a module", async () => {
+        expect(await main.isPathContainModule(PATH_TO_FILE)).toBeFalsy();
     });
 
 });
