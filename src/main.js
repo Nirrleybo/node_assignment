@@ -36,7 +36,7 @@ class Main {
     }
 
     get_mod_dependencies_rec(dir, mod_arr, dep_arr = []) {
-        for (let index = 0; index < mod_arr.length; index++) {
+        for (let index = 0; mod_arr && index < mod_arr.length; index++) {
             const mod = mod_arr[index];
             if(!dep_arr.includes(mod)) {
                 dep_arr.push(mod)

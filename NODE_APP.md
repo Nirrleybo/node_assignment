@@ -32,5 +32,17 @@ node index.js changed_file_path=CHANGED.txt project_path=sample-project
 # Build
 docker build -t test-code .
 
-# Run
+# Run from current location
+docker run --rm \
+-e PROJECT_PATH="src/mocks/project" \
+-e CHANGED_FILE_PATH="src/mocks/CHANGED.txt" \
+-v $PWD:/app \
+test-code
+
+# Run with custom volume path
+docker run --rm \
+-e PROJECT_PATH="/project" \
+-e CHANGED_FILE_PATH="/project/CHANGED.txt" \
+-v /Users/nir/giffgaff/auto-ecr/sample-project:/project \
+test-code
 ```

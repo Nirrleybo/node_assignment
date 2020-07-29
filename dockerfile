@@ -7,11 +7,9 @@ COPY index.js .
 COPY package*.json ./
 RUN npm i
 
-# Node Args
 ENV PROJECT_PATH=""
 ENV CHANGED_FILE_PATH=""
 
 CMD ["sh", "-c", "node index.js \
 project_path=${PROJECT_PATH} \
-changed_file_path=${CHANGED_FILE_PATH} \
-"]
+changed_file_path=${CHANGED_FILE_PATH}"]
