@@ -32,6 +32,18 @@ class Files {
             fs.exists(path.join(file_path, file_name), (exists => resolve(exists)));
         });
     }
+
+    static async fetch_files_from_dir(directoryPath) {
+        // directoryPath = path.join(__dirname, directoryPath);
+        return new Promise((res, rej) => {
+            fs.readdir(directoryPath, (err, files) => {
+                if(err){
+                    rej(err);
+                }
+                res(files);
+            })
+        })
+    }
 }
 
 
