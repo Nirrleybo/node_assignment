@@ -1,5 +1,7 @@
 FROM node:12.16-alpine
 
+RUN apk add --no-cache bash
+
 WORKDIR /app
 
 COPY src ./src

@@ -2,9 +2,10 @@
 
 ## Requirements
 
-`Nodejs`: 12.16.1  
-`npm`: 6.13.4
+`Nodejs`: >= 12.16  
+`npm`: >= 6.14
 
+## Setup
 ```sh
 # Set node
 nvm use 12.16
@@ -32,17 +33,34 @@ node index.js changed_file_path=CHANGED.txt project_path=sample-project
 # Build
 docker build -t test-code .
 
-# Run from current location
+# Run
 docker run --rm \
 -e PROJECT_PATH="src/mocks/project" \
 -e CHANGED_FILE_PATH="src/mocks/CHANGED.txt" \
 -v $PWD:/app \
 test-code
+```
 
-# Run with custom volume path
+### Additional running options
+```sh
+# Run from current location (option 2)
+docker run --rm \
+-e PROJECT_PATH="sample-project" \
+-e CHANGED_FILE_PATH="CHANGED.txt" \
+-v $PWD:/app \
+test-code
+
+# Run with remote volume path
 docker run --rm \
 -e PROJECT_PATH="/project" \
 -e CHANGED_FILE_PATH="/project/CHANGED.txt" \
--v /Users/nir/giffgaff/auto-ecr/sample-project:/project \
+-v /pat/to/project:/app/project \
 test-code
+
+# Run in interactive mode
+docker run --rm \
+-e PROJECT_PATH="/project" \         
+-e CHANGED_FILE_PATH="/project/CHANGED.txt" \ 
+-v /pat/to/project:/app/project \
+-it test-code /bin/bash
 ```

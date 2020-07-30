@@ -1,6 +1,7 @@
 const Main = require('./src/main');
 const Logger = require('./src/logger');
 const Utils = require('./src/utils');
+const path = require('path');
 
 process.on('unhandledRejection', (reason, promise) => {
     Logger.error(`Unhandled Rejection\n${reason.stack || reason}`)
@@ -17,8 +18,12 @@ function fetch_args() {
 
 async function main() {
     const args = fetch_args();
+
+    const project_path = path.join(__dirname, args.project_path);
+    const changed_file_path = path.join(__dirname, args.changed_file_path);
+
     const main = new Main();
-    return await main.get_dependencies(args.project_path, args.changed_file_path)
+    return await main.get_dependencies(project_path, changed_file_path)
 }
 
 main().then(x => console.log(x.join(" ")))
