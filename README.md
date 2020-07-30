@@ -1,84 +1,66 @@
-#Example setup
+# Dependencies Builder Assignment
 
-* `CHANGED.txt` has the list of changed files
-* Paths in CHANGED.txt are relative to the root of the project.
-* Paths in `.module` files are relative to the root of the project.
+## Requirements
 
-##Expected results:
+`Nodejs`: >= 12.16  
+`npm`: >= 6.14
 
-Given the files listed in `CHANGED.txt`, these are the modules containing the changed files:
- * deployment (module containing `deployment/Dockerfile`)
- * app-backend (module containing `app-backend/src/test/java/ServiceImplTest.java`)
+## Setup
+```sh
+# Set node
+nvm use 12.16
 
-These are the modules with all their dependencies, including transitive dependencies:
- * deployment
- * app-backend
- * cache-integration (dependency of app-backend)
- * db-integration (dependency of app-backend)
- * utilities (dependency of db-integration)
+# Install
+npm i
 
-So the expected result should look like this (order doesn't matter):
-`deployment, app-backend, cache-integration, db-integration, utilities`
-
-##Project structure
+# Test
+npm run test
 ```
-project
-├── CHANGED.txt
-├── README.md
-├── app-backend
-│   ├── .module
-│   └── src
-│       ├── main
-│       │   └── java
-│       │       └── ServiceImpl.java
-│       └── test
-│           └── java
-│               └── ServiceImplTest.java
-├── app-frontend
-│   ├── .module
-│   └── src
-│       ├── main
-│       │   └── java
-│       │       └── HelloWorld.java
-│       └── test
-│           ├── java
-│           │   └── HelloWorldTest.java
-│           └── resources
-│               └── testData.txt
-├── assets
-│   ├── .module
-│   ├── doc  
-│   │   └── user-guide
-│   │       └── index.html
-│   └── images
-│       ├── back.png
-│       └── home.png
-├── cache-integration
-│   └── .module
-├── db-integration
-│   ├── .module
-│   └── src
-│       ├── main
-│       │   ├── java
-│       │   │   ├── Team.java
-│       │   │   └── User.java
-│       │   └── resources
-│       │       └── migrations.sql
-│       └── test
-│           └── java
-│               ├── TeamTest.java
-│               └── UserTest.java
-├── deployment
-│   ├── .module
-│   └── Dockerfile
-├── instrumentation
-│   ├── .module
-│   └── src
-│       └── main
-│           └── java
-│               └── CutPoints.java
-└── utilities
-    └── .module
 
-26 directories, 23 files
+## Run locally
+
+### Defaults params set to:  
+`changed_file_path`: "CHANGED.txt"  
+`project_path`: "sample-project"
+```sh
+# Run with params:
+node index.js changed_file_path=CHANGED.txt project_path=sample-project
+```
+
+## Docker
+
+```sh
+# Build
+docker build -t test-code .
+
+# Run
+docker run --rm \
+-e PROJECT_PATH="src/mocks/project" \
+-e CHANGED_FILE_PATH="src/mocks/CHANGED.txt" \
+-v $PWD:/app \
+test-code
+```
+
+### Additional running options
+```sh
+# Run from current location (option 2)
+docker run --rm \
+-e PROJECT_PATH="sample-project" \
+-e CHANGED_FILE_PATH="CHANGED.txt" \
+-v $PWD:/app \
+test-code
+
+# Run with remote volume path
+docker run --rm \
+-e PROJECT_PATH="/project" \
+-e CHANGED_FILE_PATH="/project/CHANGED.txt" \
+-v /pat/to/project:/app/project \
+test-code
+
+# Run in interactive mode
+docker run --rm \
+-e PROJECT_PATH="/project" \         
+-e CHANGED_FILE_PATH="/project/CHANGED.txt" \ 
+-v /pat/to/project:/app/project \
+-it test-code /bin/bash
 ```
